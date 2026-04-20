@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Farewell Gatekeeper - System Authentication</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="desktop.css">
+</head>
+<body>
+    <div id="app-header" style="display: none;">
+        <div class="header-status-row">
+            <div class="header-left">
+                <span class="status-dot"></span> SYSTEM_ACTIVE
+            </div>
+            <div class="header-right" id="live-clock">00:00:00</div>
+        </div>
+        <div class="header-center">RETRO FAREWELL PARTY</div>
+    </div>
+    <div class="desktop">
+      <div class="grain-overlay"></div>
+      
+      <div class="window-container" id="loginWindow">
+        <div class="title-bar">
+          <div class="title-text">System Authentication</div>
+        </div>
+        <div class="window-body">
+          <p>Please enter your 4-digit access code:</p>
+          <input type="password" id="accessCode" maxlength="4" placeholder="0000">
+          <div class="button-row">
+            <button id="confirmBtn" class="win95-btn">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="desktop.js"></script>
+</body>
+</html>
