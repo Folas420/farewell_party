@@ -83,12 +83,20 @@ window.openWindow = (type) => {
     } else if (type === 'rsvp') {
         windowTitle = 'RSVP_Control_Panel.exe';
         windowContent = `
-            <p>Welcome, ${guestData.guestName || 'Guest'}. Update your status:</p>
-            <select id="rsvpStatus" style="width: 100%; margin: 10px 0;">
+            <p>Welcome, ${guestData.guestName || 'Guest'}.</p>
+            
+            <label style="font-size: 11px; font-weight: bold;">ATTENDANCE:</label>
+            <select id="rsvpStatus" style="width: 100%; margin-bottom: 10px;">
                 <option value="Attending" ${guestData.rsvpStatus === 'Attending' ? 'selected' : ''}>See you there 🕶️</option>
                 <option value="Not Attending" ${guestData.rsvpStatus === 'Not Attending' ? 'selected' : ''}>I will miss you😭</option>
             </select>
-            <br>
+
+            <label style="font-size: 11px; font-weight: bold;">PLUS ONE (How many?):</label>
+            <input type="number" id="plusOneCount" value="${guestData.plusOne || 0}" min="0" max="5" style="width: 100%; margin-bottom: 10px;">
+
+            <label style="font-size: 11px; font-weight: bold;">NOTES (Dietary/Song req):</label>
+            <textarea id="rsvpNotes" style="width: 100%; height: 50px; margin-bottom: 10px; font-family: sans-serif;">${guestData.notes || ''}</textarea>
+            
             <button id="saveRsvp" class="win95-btn" style="width: 100%;">Save Changes</button>
         `;
     } else if (type === 'logistics') {
@@ -104,7 +112,6 @@ window.openWindow = (type) => {
         const hoursRemaining = (partyTime - now) / (1000 * 60 * 60);
 
         if (hoursRemaining <= 4) {
-            // FULL REVEAL (4 hours or less)
             windowContent = `
                 <div style="text-align:center;">
                     <h3 style="color:#0f0; font-family:'Courier New', monospace;">UNLOCKED: SECTOR ACCESS GRANTED</h3>
@@ -113,19 +120,16 @@ window.openWindow = (type) => {
                 </div>
             `;
         } else if (hoursRemaining <= 6) {
-            // 95% STAGE
             windowContent = `
                 <p style="font-weight: bold; color: #CC5500;">DECRYPTING... [||||||||||| ] 95%</p>
                 <p>Satellite uplink stabilizing. Final coordinates arriving soon.</p>
             `;
         } else if (hoursRemaining <= 12) {
-            // 85% STAGE
             windowContent = `
                 <p style="font-weight: bold;">DECRYPTING... [|||||||||   ] 85%</p>
                 <p>Security protocols bypassed. Identifying venue signal...</p>
             `;
         } else {
-            // BASE STAGE
             windowContent = `
                 <p style="font-weight: bold;">DECRYPTING... [||          ] 12%</p>
                 <p>System is scanning. Check back 12 hours before launch.</p>
@@ -145,10 +149,8 @@ window.openWindow = (type) => {
         </div>
     `;
 
-    // Clear previous window for simplicity, or append for multi-window
     document.getElementById('window-layer').innerHTML = windowHTML;
 
-    // Add RSVP Save Event
     if (document.getElementById('saveRsvp')) {
         document.getElementById('saveRsvp').addEventListener('click', saveRsvpChanges);
     }
@@ -156,6 +158,8 @@ window.openWindow = (type) => {
 
 window.saveRsvpChanges = async () => {
     const status = document.getElementById('rsvpStatus').value;
+    const plusOne = document.getElementById('plusOneCount').value;
+    const notes = document.getElementById('rsvpNotes').value;
     const btn = document.getElementById('saveRsvp');
     const guestCode = currentGuestData ? currentGuestData.code : '';
 
@@ -165,18 +169,23 @@ window.saveRsvpChanges = async () => {
     try {
         await fetch(API_URL, {
             method: 'POST',
-            mode: 'no-cors', // Necessary for Google Apps Script Web Apps
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 code: guestCode,
                 rsvpStatus: status,
-                plusOne: 0, // Default for now
-                notes: "Updated via mobile/web"
+                plusOne: plusOne,
+                notes: notes
             })
         });
         alert('RSVP Updated Successfully! See you there.');
         btn.innerText = "Saved!";
-        // Optional: Close window after success
+        
+        // Update local data so if they open the window again, it shows the new values
+        currentGuestData.rsvpStatus = status;
+        currentGuestData.plusOne = plusOne;
+        currentGuestData.notes = notes;
+
         setTimeout(() => {
             const win = btn.closest('.window-container');
             if (win) win.remove();
