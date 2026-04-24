@@ -104,8 +104,8 @@ window.openWindow = (type) => {
         windowContent = '<p>DATE: April 25, 2026<br>TIME: 19:00 launch.</p>';
     } else if (type === 'map') {
         const partyTime = new Date("April 25, 2026 19:00:00").getTime();
-        const mapLink = "https://maps.app.goo.gl/kPW9yixaQqD4PBBs9";
-        const address = "Přadlácká 28, 602 00 Brno-sever";
+        const mapLink = "https://www.google.com/maps/search/?api=1&query=Kavárna+Spolek+Brno";
+        const address = "Orlí 22, 602 00 Brno-střed";
         
         windowTitle = 'Secret_Map.map';
         const now = new Date().getTime();
@@ -114,15 +114,19 @@ window.openWindow = (type) => {
         if (hoursRemaining <= 4) {
             windowContent = `
                 <div style="text-align:center;">
-                    <h3 style="color:#0f0; font-family:'Courier New', monospace;">UNLOCKED: SECTOR ACCESS GRANTED</h3>
+                    <h3 style="color:#0f0; font-family:'Courier New', monospace;">UNLOCKED: ACCESS GRANTED - KAVÁRNA SPOLEK</h3>
                     <p style="font-family:monospace; background:#000; color:#0f0; padding:10px; border: 1px inset #fff;">${address}</p>
+                <div style="margin: 10px 0; border: 2px dashed #ff00ff; padding: 8px; background: #222;">
+                    <p style="color: #0ff; font-weight: bold; margin: 0; font-size: 13px;">⚠️ OUTFIT CHECK ⚠️</p>
+                    <p style="color: #fff; font-size: 11px; margin: 5px 0;">Remember to bring: <b>NEON, NOSTALGIA & RETRO CHIC</b></p>
+                </div>
                     <a href="${mapLink}" target="_blank" class="win95-btn" style="display:inline-block; text-decoration:none; margin-top:10px;">OPEN EXTERNAL MAP</a>
                 </div>
             `;
         } else if (hoursRemaining <= 6) {
             windowContent = `
                 <p style="font-weight: bold; color: #CC5500;">DECRYPTING... [||||||||||| ] 95%</p>
-                <p>Satellite uplink stabilizing. Final coordinates arriving soon.</p>
+                <p>Satellite uplink stabilizing. Final coordinates arriving soon. City center..</p>
             `;
         } else if (hoursRemaining <= 12) {
             windowContent = `
